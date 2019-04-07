@@ -27,7 +27,7 @@ class User
     // Login User
     public function login($username, $password){
         $this->db->query('SELECT * FROM users WHERE username = :username');
-        $this->db->bind(':email', $username);
+        $this->db->bind(':username', $username);
 
         $row = $this->db->single();
 

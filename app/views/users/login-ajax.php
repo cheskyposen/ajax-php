@@ -45,7 +45,7 @@
 
             xhr.onload = function(){
                 console.log(this.response);
-                let data = this.response;
+                let data = JSON.parse(this.response);
                 if(data.success){
                     document.getElementById('msg').innerHTML = data.success;
                 }
