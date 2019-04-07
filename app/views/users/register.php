@@ -3,6 +3,7 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
             <div class="card card-body bg-light mt-5">
+                <h3 class="lead text-center text-success"><?php echo $data['success']; ?></h3>
                 <h2>Create An Account</h2>
                 <p>Please fill out this form to register with us</p>
                 <form action="register" method="post">

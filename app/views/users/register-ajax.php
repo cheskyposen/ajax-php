@@ -68,6 +68,9 @@
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
             xhr.onload = function(){
+                if (this.response === true) {
+                    window.location = 'localhost/exam-april-7/users/loginAjax';
+                }
                 console.log(this.response);
                 response = this.response;
                 console.log(response);
@@ -90,7 +93,7 @@
                 // if(response.confirm_password_err){
                 //     document.getElementById('confirm_password').classList.add('is-invalid');
                 //     document.getElementById('confirm_password_err').innerText = response.confirm_password_err;
-                // }
+                //
             };
 
             xhr.send(params);

@@ -9,14 +9,45 @@ class Users extends Controller
 
     public function index(){
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        $data = [
-            "title" => 'login page',
-            "email" => '',
-            "email_err" => '',
-            "password" => '',
-            "password_err" => ''
-        ];
+            $data = [
+                "title" => 'login page',
+                "email" => trim($_POST['email']),
+                "email_err" => '',
+                "password" => trim('username'),
+                "password_err" => '',
+                "success" => ''
+            ];
+
+            if(empty($data['email'])){
+                $data['email_err'] = "email must be entered";
+            }else{
+                if($this->userModel->findUserByEmail($data['email'])){
+                    $data['email_err'] = "email not found";
+                }
+            }
+            if(empty($data['password'])){
+                $data['password_err'] = "password must be entered";
+            }
+            if(empty($data['email_err']) && empty($data['password_err'])){
+                if(!$this->userModel->login($data['email'], $data['password'])){
+                    $data['password_err'] = "password does not match";
+                }else{
+                    $data['success'] = 'you have successfully logged in';
+                }
+            }
+        }else {
+            $data = [
+                "title" => 'login page',
+                "email" => '',
+                "email_err" => '',
+                "password" => '',
+                "password_err" => '',
+                "success" => ''
+            ];
+        }
         $this->view('users/login', $data);
     }
 
@@ -47,7 +78,8 @@ class Users extends Controller
                 "password" => trim($_POST['password']),
                 "password_err" => '',
                 "confirm_password" => trim($_POST['confirm_password']),
-                "confirm_password_err" => ''
+                "confirm_password_err" => '',
+                "success" => ''
             ];
 
             if(empty($data['name'])){
@@ -66,20 +98,29 @@ class Users extends Controller
 
             if(empty($data['username'])){
                 $data['username_err'] = 'username must be entered';
-            }else{
-
+            }elseif($this->userModel->findUserByUsername($data['username'])){
+                $data['username_err'] = 'username already taken';
             }
 
             if(empty($data['password'])){
                 $data['password_err'] = 'password must be entered';
-            }else{
-
             }
 
             if(empty($data['confirm_password'])){
-                $data['confirm_password_err'] = 'must confirm password be entered';
-            }else{
+                $data['confirm_password_err'] = 'confirm password must be entered';
+            }elseif($data['password'] !== $data['confirm_password']){
+                $data['confirm_password_err'] = 'password does not match';
+            }
 
+            if(empty($data['name_err']) && empty($data['age_err']) && empty($data['username_err']) && empty($data['email_err'])
+                && empty($data['password_err']) && empty($data['confirm_password_err'])){
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+                if ($this->userModel->register($data)){
+                    $data['success'] = 'you have successfully registered';
+                }else{
+                    $data['success'] = 'some error happened';
+                }
+                $data['password'] = $data['confirm_password'];
             }
         }else {
             $data = [
@@ -95,7 +136,8 @@ class Users extends Controller
                 "password" => '',
                 "password_err" => '',
                 "confirm_password" => '',
-                "confirm_password_err" => ''
+                "confirm_password_err" => '',
+                "success" => ''
             ];
         }
         $this->view('users/register', $data);
