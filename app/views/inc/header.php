@@ -10,6 +10,20 @@
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#"><?php echo SITENAME; ?></a>
+    <a class="navbar-brand" href="http://localhost/exam-april-7/"><?php echo SITENAME; ?></a>
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="http://localhost/exam-april-7/users/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="http://localhost/exam-april-7/users/loginAjax">Login Ajax</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="http://localhost/exam-april-7/users/register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="http://localhost/exam-april-7/users/registerAjax">Register Ajax</a>
+        </li>
+    </ul>
 </nav>
   
