@@ -38,6 +38,8 @@ class Users extends Controller
                 "title" => 'login ajax page',
                 "name" => trim($_POST['name']),
                 "name_err" => '',
+                "age" => trim($_POST['age']),
+                "age_err" => '',
                 "email" => trim($_POST['email']),
                 "email_err" => '',
                 "username" => trim($_POST['username']),
@@ -50,14 +52,16 @@ class Users extends Controller
 
             if(empty($data['name'])){
               $data['name_err'] = 'name must be entered';
-            }else{
+            }
 
+            if(empty($data['age'])){
+                $data['age_err'] = 'age must be entered';
+            }elseif(intval($data['age']) <= 0){
+                $data['age_err'] = 'age can not be 0 or below';
             }
 
             if(empty($data['email'])){
                 $data['email_err'] = 'email must be entered';
-            }else{
-
             }
 
             if(empty($data['username'])){
@@ -82,6 +86,8 @@ class Users extends Controller
                 "title" => 'login ajax page',
                 "name" => '',
                 "name_err" => '',
+                "age" => '',
+                "age_err" => '',
                 "email" => '',
                 "email_err" => '',
                 "username" => '',
@@ -96,19 +102,75 @@ class Users extends Controller
     }
 
     public function registerAjax(){
-        $data = [
-            "title" => 'login ajax page',
-            "name" => '',
-            "name_err" => '',
-            "email" => '',
-            "email_err" => '',
-            "username" => '',
-            "username_err" => '',
-            "password" => '',
-            "password_err" => '',
-            "confirm_password" => '',
-            "confirm_password_err" => ''
-        ];
-        $this->view('users/register-ajax', $data);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data = [
+                "title" => 'login ajax page',
+                "name" => trim($_POST['name']),
+                "name_err" => '',
+                "age" => trim($_POST['age']),
+                "age_err" => '',
+                "email" => $_POST['email'],
+                "email_err" => '',
+                "username" => trim($_POST['username']),
+                "username_err" => '',
+                "password" => trim($_POST['password']),
+                "password_err" => '',
+                "confirm_password" => trim($_POST['confirm_password']),
+                "confirm_password_err" => ''
+            ];
+
+            if(empty($data['name'])){
+                $data['name_err'] = 'name must be entered';
+            }
+
+            if(empty($data['age'])){
+                $data['age_err'] = 'age must be entered';
+            }elseif(intval($data['age']) <= 0){
+                $data['age_err'] = 'age can not be 0 or below';
+            }
+
+            if(empty($data['email'])){
+                $data['email_err'] = 'email must be entered';
+            }
+
+            if(empty($data['username'])){
+                $data['username_err'] = 'username must be entered';
+            }
+
+            if(empty($data['password'])){
+                $data['password_err'] = 'password must be entered';
+            }
+
+            if(empty($data['confirm_password'])){
+                $data['confirm_password_err'] = 'must confirm password be entered';
+            }
+            if(empty($data['name_err']) && empty($data['age_err']) && empty($data['email_err'])
+                && empty($data['username_err']) && empty($data['password_err']) && empty($data['confirm_password_err'])){
+                $success = $this->userModel->register($data);
+                header('Content-type: application/json');
+                echo json_encode($success);
+            }else{
+                header('Content-type: application/json');
+                echo json_encode($data);
+            }
+        }else {
+            $data = [
+                "title" => 'login ajax page',
+                "name" => '',
+                "name_err" => '',
+                "age" => '',
+                "age_err" => '',
+                "email" => '',
+                "email_err" => '',
+                "username" => '',
+                "username_err" => '',
+                "password" => '',
+                "password_err" => '',
+                "confirm_password" => '',
+                "confirm_password_err" => ''
+            ];
+            $this->view('users/register-ajax', $data);
+        }
     }
 }
