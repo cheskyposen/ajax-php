@@ -39,22 +39,6 @@ class User
         }
     }
 
-    // Find user by email
-    public function findUserByEmail($email){
-        $this->db->query('SELECT * FROM users WHERE email = :email');
-        // Bind value
-        $this->db->bind(':email', $email);
-
-        $row = $this->db->single();
-
-        // Check row
-        if($this->db->rowCount() > 0){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     // Find user by username
     public function findUserByUsername($username){
         $this->db->query('SELECT * FROM users WHERE username = :username');
@@ -69,16 +53,5 @@ class User
         } else {
             return false;
         }
-    }
-
-    // Get User by ID
-    public function getUserById($id){
-        $this->db->query('SELECT * FROM users WHERE id = :id');
-        // Bind value
-        $this->db->bind(':id', $id);
-
-        $row = $this->db->single();
-
-        return $row;
     }
 }
